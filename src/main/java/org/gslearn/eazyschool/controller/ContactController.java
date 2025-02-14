@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
@@ -49,10 +51,18 @@ public class ContactController {
             return "contact.html";
         }
         contactService.saveMessageDetails(contact);
-        contactService.setCounter(contactService.getCounter()+1);
-        log.info("Counter Value is:"+ contactService.getCounter()
-        );
+//        contactService.setCounter(contactService.getCounter()+1);
+//        log.info("Counter Value is:"+ contactService.getCounter()
+//        );
         return "redirect:/contact";
+    }
+
+    @RequestMapping("/displayMessages")
+    public ModelAndView displayMessage(Model model){
+        List<Contact> contactList = contactService.findMsgWithOpenStatus();
+        ModelAndView modelAndView = new ModelAndView("messages.html");
+        modelAndView.addObject("contactMsgs", contactList);
+        return modelAndView;
     }
 
 

@@ -6,7 +6,6 @@ import org.gslearn.eazyschool.service.ContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -29,7 +28,7 @@ public class ContactController {
 
     @RequestMapping(value = "/contact")
     public String displayContactPage(Model model) {
-        model.addAttribute("contact",new Contact());
+        model.addAttribute("contact", new Contact());
         return "contact.html";
     }
 
@@ -44,10 +43,10 @@ public class ContactController {
 //        return new ModelAndView("redirect:/contact");
 //    }
 
-    @RequestMapping(value="/saveMsg",method = POST)
-    public String saveContactInformation(@Valid @ModelAttribute("contact") Contact contact, Errors errors){
-        if(errors.hasErrors()){
-            log.info("Error in form"+errors);
+    @RequestMapping(value = "/saveMsg", method = POST)
+    public String saveContactInformation(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
+        if (errors.hasErrors()) {
+            log.info("Error in form" + errors);
             return "contact.html";
         }
         contactService.saveMessageDetails(contact);
@@ -58,11 +57,17 @@ public class ContactController {
     }
 
     @RequestMapping("/displayMessages")
-    public ModelAndView displayMessage(Model model){
+    public ModelAndView displayMessage(Model model) {
         List<Contact> contactList = contactService.findMsgWithOpenStatus();
         ModelAndView modelAndView = new ModelAndView("messages.html");
         modelAndView.addObject("contactMsgs", contactList);
         return modelAndView;
+    }
+
+    @RequestMapping(value = "/closeMsg", method = RequestMethod.GET)
+    public String displayMessage(@RequestParam int id) {
+        contactService.updateMsgStatus(id);
+        return "redirect:/displayMessages";
     }
 
 

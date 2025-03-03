@@ -1,13 +1,23 @@
 package org.gslearn.eazyschool.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@Entity
+@Table(name = "contact_msg")
 public class Contact extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int contactId;
+
     @NotBlank(message = "Name should not be blank")
     @Size(min = 3)
     private String name;

@@ -1,7 +1,9 @@
 package org.gslearn.eazyschool.constants;
 
 public interface EasySchoolConstants {
-    public static final String ANONYMOUS = "Anonymous";
-    public static final String OPEN = "Open";
-    public static final String CLOSE = "Close";
+    String ANONYMOUS = "Anonymous";
+    String OPEN = "Open";
+    String CLOSE = "Close";
+    String STUDENT_ROLE = "STUDENT";
+    String ADMIN_ROLE = "ADMIN";
 }

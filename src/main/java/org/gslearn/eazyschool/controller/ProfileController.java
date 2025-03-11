@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Slf4j
-@Controller
+@Controller("profileBeanController")
 public class ProfileController {
 
     @Autowired

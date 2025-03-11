@@ -1,16 +1,11 @@
 package org.gslearn.eazyschool.config;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -32,20 +27,31 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf((csrf) -> csrf.ignoringRequestMatchers("/saveMsg")
                                 .ignoringRequestMatchers("/public/**")
+                                .ignoringRequestMatchers("/api/**")
+                                .ignoringRequestMatchers("/data-api/**")
+                                .ignoringRequestMatchers("/eazyschool/actuator/**")
 //                        .ignoringRequestMatchers(PathRequest.toH2Console())
                 )
                 .authorizeHttpRequests((authorizeRequests) -> authorizeRequests.requestMatchers("/dashboard").authenticated()
-                                .requestMatchers("/displayMessages").hasRole("ADMIN")
+                                .requestMatchers("/displayMessages/**").hasRole("ADMIN")
                                 .requestMatchers("/closeMsg/**").hasRole("ADMIN")
-                                .requestMatchers("/", "/home").permitAll()
-                                .requestMatchers("/holiday/**").permitAll()
-                                .requestMatchers("/contact").permitAll()
-                                .requestMatchers("/displayProfile").permitAll()
-                                .requestMatchers("/updateProfile").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/about").permitAll()
-                                .requestMatchers("/courses").permitAll()
+                                .requestMatchers("/api/**").authenticated()
+                                .requestMatchers("/data-api/**").authenticated()
+                                .requestMatchers("/displayProfile").authenticated()
+                                .requestMatchers("/eazyschool/actuator/**").authenticated()
+                                .requestMatchers("/updateProfile").authenticated()
+                                .requestMatchers("/student/**").hasRole("STUDENT")
+                                /*.requestMatchers("/profile/**").permitAll()
+                                .requestMatchers("/courseses/**").permitAll()
+                                .requestMatchers("/contacts/**").permitAll()
+                                 .requestMatchers("/data-api/**").permitAll()*/
+                                .requestMatchers("/", "/home").permitAll()
+                                .requestMatchers("/holidays/**").permitAll()
+                                .requestMatchers("/contact").permitAll()
                                 .requestMatchers("/saveMsg").permitAll()
+                                .requestMatchers("/courses").permitAll()
+                                .requestMatchers("/about").permitAll()
                                 .requestMatchers("/assets/**").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/logout").permitAll()

@@ -15,13 +15,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @Component
-@Profile("prod")
-public class EazyschoolUsernamePwdAuthenticationProvider implements AuthenticationProvider {
+@Profile("!prod")
+public class EazyschoolNonProdUsernamePwdAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     PersonRepository personRepository;
 
@@ -33,8 +32,7 @@ public class EazyschoolUsernamePwdAuthenticationProvider implements Authenticati
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
         Person person = personRepository.findByEmail(email);
-        if (Objects.nonNull(person) && person.getPersonId() > 0 &&
-                passwordEncoder.matches(password,person.getPwd())) {
+        if (Objects.nonNull(person) && person.getPersonId() > 0 ) {
             return new UsernamePasswordAuthenticationToken(email, null, getGrantedAuthories(person.getRoles()));
         } else {
             throw new BadCredentialsException("Invalid username or password");
